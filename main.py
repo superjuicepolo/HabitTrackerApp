@@ -1,7 +1,7 @@
 from habits_app_functions import *
 from database import *
 
-
+# Sample habit objects
 habit1 = Habit(
     habit_name="Waking up early",
     period= Habit.PeriodicityType.DAILY,
@@ -35,7 +35,7 @@ habit4 = Habit(
                         False, True, False, True, True, True, False, True, True, False, True, False, True, True])
 
 habit5 = Habit(
-    habit_name= "Doing excerise",
+    habit_name= "Doing exercise",
     period= Habit.PeriodicityType.WEEKLY,
     habit_broken = False,
     date_of_creation = datetime.now(),
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     list_of_habits = [habit1, habit2, habit3, habit4, habit5]
     while True:
         try:
-            # User input to select an option from the menu
+            # Displaying the main menu for user interaction
             main_option = input("""
 Enter 1 if you want to print the list of habits
 Enter 2 if you want to choose existing habit
@@ -120,7 +120,7 @@ option: """)
             # The rest of your code for handling other options
 
         except Exception as e:
-            # Catch any exceptions and print an error message
+            # Display any exceptions that occur during the program execution
             print(f"Exception: {e}")
 
 

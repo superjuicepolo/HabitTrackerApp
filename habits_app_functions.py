@@ -4,7 +4,12 @@ from habit import Habit
 
 def input_period() -> Habit.PeriodicityType:
     period_option = input("Choose daily(1), weekly(2), monthly(3) or yearly(4) to define time span:")
-    # Initialize period with a default value in case the input is not as expected
+    """
+        Prompt user to input and choose a periodicity type for the habit.
+
+        Returns:
+            Habit.PeriodicityType: The selected periodicity type.
+        """
     period = None
     if period_option == "1":
         print("Daily habit")
@@ -22,7 +27,12 @@ def input_period() -> Habit.PeriodicityType:
 
 
 def create_new_habit():
-    # Create a new habit based on user input.
+    """
+        Create a new habit based on user input.
+
+        Returns:
+            Habit: The newly created Habit object.
+        """
     print("To create habit,write habit name:")
     habit_name = input()
     period = input_period()
@@ -42,11 +52,23 @@ def create_new_habit():
     return habit
 
 def choose_habit_in_list_of_habits(list_of_habits: List[Habit]):
+    """
+       Prompt user to choose a habit from a list of habits.
+
+       Returns:
+           Habit: The selected Habit object.
+       """
     index_of_habit = input("""Choose index habit in list_of_habits: """)
     habit_with_which_we_are_working = list_of_habits[int(index_of_habit) - 1]
     return habit_with_which_we_are_working
 
 def work_with_habit(habit: Habit):
+    """
+        Perform operations on a given habit based on user input.
+
+        Parameters:
+            habit (Habit): The Habit object to work with.
+        """
     print(f"history of our habit array is: {habit.get_completeness_array()}")
     option_of_user = input("""
     Enter 1 if you want to complete habit
@@ -65,15 +87,17 @@ def work_with_habit(habit: Habit):
 
 
 def print_habits(list_of_habits: List[Habit]):
-    # User chooses to print the list of habits
+    """Print the list of habits."""
     for index, habit_in_list in enumerate(list_of_habits):
         print(f"habit{index + 1}: {habit_in_list}")
 
-    # Way 2:
-    #print("\n".join(map(lambda x: f"habit{x[0] + 1}: {x[1]}", enumerate(list_of_habits))))
-
 def get_longest_streak(list_of_habits: List[Habit]):
-    # User chooses to get the longest streak among all habits
+    """
+        Determine and print the longest streak among all habits in the provided list.
+
+        Parameters:
+            list_of_habits (List[Habit]): List containing Habit objects.
+        """
     longest_streak = 0
     for index, habit_in_list in enumerate(list_of_habits):
         streak = habit_in_list.get_streak()
@@ -82,12 +106,22 @@ def get_longest_streak(list_of_habits: List[Habit]):
     print(f"The longest streak among all habits is: {longest_streak}")
 
 def print_streak_for_all_habits_in_list(list_of_habits: List[Habit]):
-    # User chooses to show streaks of all habits
+    """
+        Print streaks for all habits in the provided list.
+
+        Parameters:
+            list_of_habits (List[Habit]): List containing Habit objects.
+        """
     for index, habit_in_list in enumerate(list_of_habits):
         print(f"streak of habit{index + 1}: {habit_in_list.get_streak()}")
 
 def print_habits_with_same_periodicity_in_list(list_of_habits: List[Habit]):
-    # User chooses to get the list of habits with the same periodicity
+    """
+        Print habits with the same periodicity as specified by the user.
+
+        Parameters:
+            list_of_habits (List[Habit]): List containing Habit objects.
+        """
     target_periodicity = input("Enter the periodicity (daily/weekly/monthly/yearly): ").strip().lower()
     habits_with_same_periodicity = [habit for habit in list_of_habits if
                                     habit.get_period() == Habit.PeriodicityType[target_periodicity.upper()]]
@@ -104,13 +138,18 @@ def print_habits_with_same_periodicity_in_list(list_of_habits: List[Habit]):
 
 
 def edit_habit(habit: Habit):
+    """
+        Edit a given habit based on user input.
+
+        Parameters:
+            habit (Habit): The Habit object to edit.
+        """
     print(f"Editing habit: {habit}")
 
     edit_option = input("""
 Enter 1 to edit habit name
 Enter 2 to edit period
-Enter 3 to edit time
-Enter 4 to go back to the main menu
+Enter 3 to go back to the main menu
 
 Option: """)
 
@@ -121,15 +160,23 @@ Option: """)
         print("Habit name updated.")
     elif edit_option == "2":
         # User chooses to edit the period
-        new_period = input("Enter new period (daily/weekly): ")
+        new_period_input = input("Enter new period (daily/weekly/monthly/yearly): ").lower()
+        # Map user input to PeriodicityType Enum value
+        if new_period_input == "daily":
+            new_period = Habit.PeriodicityType.DAILY
+        elif new_period_input == "weekly":
+            new_period = Habit.PeriodicityType.WEEKLY
+        elif new_period_input == "monthly":
+            new_period = Habit.PeriodicityType.MONTHLY
+        elif new_period_input == "yearly":
+            new_period = Habit.PeriodicityType.YEARLY
+        else:
+            print("Invalid period type.")
+            return
+
         habit.set_period(new_period)
-        print("Period updated")
+        print("Period updated.")
     elif edit_option == "3":
-        # User chooses to edit the time span
-        new_time_span = int(input("Enter new time span (in minutes): "))
-        habit.time_span = new_time_span
-        print("Time span updated. ")
-    elif edit_option == "4":
         pass  # Go back to the main menu
     else:
         print("Invalid option. Pleas try again.")
@@ -140,6 +187,12 @@ def choose_number_and_remove_one(str_var: str) -> int:
 
 
 def choose_file_name():
+    """
+        Prompt user to input a file name or use a default one.
+
+        Returns:
+            str: The chosen or default file name.
+        """
     default_habit_file_path = "../../Downloads/habits.pkl"
-    file_path = input("Enter file name without extention(write 'd' if want to use default one): ")
+    file_path = input("Enter file name without extention (write 'd' if want to use default one): ")
     return default_habit_file_path if file_path == "d" else file_path + ".pkl"

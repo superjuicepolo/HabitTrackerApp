@@ -4,9 +4,14 @@ from typing import Optional, List
 
 
 class Habit:
-    # Class representing a habit with properties like name, periodicity, and completion status.
+    """
+    Class representing a habit with properties like name, periodicity, and completion status.
+    """
+
     class PeriodicityType(Enum):
-        # Enumeration for different periodicities of habits.
+        """
+        Enumeration for different periodicities of habits.
+        """
         DAILY = "daily"
         WEEKLY = "weekly"
         MONTHLY = "monthly"
@@ -19,16 +24,17 @@ class Habit:
                  habit_broken: Optional[bool]=None,
                  completeness_array: Optional[List[bool]]=None
                  ):
-        # Initialize a Habit object.
-        #
-        #         Parameters:
-        #         - habit_name (str): The name of the habit.
-        #         - period (PeriodicityType): The periodicity of the habit.
-        #         - date_of_creation (datetime): The date and time when the habit was created.
-        #         - habit_broken: (optional) The status of whether the habit is broken or not.
-        #         - completeness_array (list): (optional) An array to store the completion status of the habit.
-        #
-        #         The method calculates the initial last_deadline using the next_deadline method.
+        """ Initialize a Habit object.
+
+                Parameters:
+                - habit_name (str): The name of the habit.
+                - period (PeriodicityType): The periodicity of the habit.
+                - date_of_creation (datetime): The date and time when the habit was created.
+                - habit_broken: (optional) The status of whether the habit is broken or not.
+                - completeness_array (list): (optional) An array to store the completion status of the habit.
+
+                The method calculates the initial last_deadline using the next_deadline method.
+        """
 
         self.__habit_name = habit_name
         self.__period = period
@@ -39,10 +45,11 @@ class Habit:
 
 
     def complete(self, completion_date: datetime):
-        # Mark the habit as complete up to the specified completion date.
-        #
-        # Parameters:
-        #         - completion_date (datetime): The date up to which the habit is considered complete.
+        """ Mark the habit as complete up to the specified completion date.
+
+         Parameters:
+            - completion_date (datetime): The date up to which the habit is considered complete.
+        """
 
         #Iterate through deadlines until the completion date is reached
         current_deadline = self.__last_deadline
@@ -69,21 +76,32 @@ class Habit:
             current_deadline = next_deadline
 
     def update_is_habit_broken(self):
-        # Update the habit_broken attribute based on the first element of completeness_array.
+        """ Update the habit_broken attribute based on the first element of completeness_array.
 
         if len(self.__completeness_array) < 1:
             return
         self.__habit_broken = not self.__completeness_array[0]
+        """
+
+    def is_habit_broken(self) -> bool:
+        """
+        Check if the habit is considered broken based on its completeness array.
+        Returns:
+            bool: True if the habit is broken, False otherwise.
+        """
+        # Consider a habit broken if its first completeness entry is False (indicating failure).
+        return self.__completeness_array and not self.__completeness_array[0]
 
     def next_deadline(self,date):
 
-        # Calculate the next deadline based on the habits periodicity.
+        """ Calculate the next deadline based on the habits periodicity.
 
-        # Parameters:
-        # - date (datetime): The current deadline
+         Parameters:
+         - date (datetime): The current deadline
 
-        # Returns:
-        # datetime or None: The next deadline or None if the periodicity is not recognized.
+         Returns:
+        - datetime or None: The next deadline or None if the periodicity is not recognized.
+        """
 
         if self.__period == Habit.PeriodicityType.DAILY:
             # If the habit is daily, add one day to the current deadline
@@ -104,9 +122,10 @@ class Habit:
 
 
     def get_streak(self):
-        # Calculate the longest streak of consecutive completions for the habit.
-        # Returns:
-        # int: The length of the longest streak of consecutive completions.
+        """ Calculate the longest streak of consecutive completions for the habit.
+        Returns:
+        int: The length of the longest streak of consecutive completions.
+        """
         counter = 0
         longest_streak = 0
         for x in self.__completeness_array:
@@ -122,53 +141,73 @@ class Habit:
 
     def set_habit_name(self, name: str):
         if type(name) == str:
-            # Set a new name for the habit.
+
+            """
+            Set a new name for the habit.
+
+            Parameters:
+            - name (str): The new name for the habit.
+            """
+
             self.__habit_name = name
 
     def get_habit_name(self) -> str:
-        # Retrieve the current name of the habit.
+        """
+        Retrieve the current name of the habit.
+
+        Returns:
+        - str: The name of the habit.
+        """
         return self.__habit_name
 
     def set_period(self, time_span):
-        # Set a new time span (period) for the habit.
+        """ Set a new time span (period) for the habit."""
         self.__period = time_span
 
     def get_period(self):
-        # Retrieve the current time span (period) of the habit.
+        """ Retrieve the current time span (period) of the habit."""
         return self.__period
 
 
     def get_date_of_creation(self):
-        # Retrieve the date and time when the habit was created.
+        """ Retrieve the date and time when the habit was created."""
         return self._date_of_creation
 
 
     def set_date_of_creation(self, date):
-        # Set a new date and time for the habit's creation.
+        """ Set a new date and time for the habit's creation."""
         self._date_of_creation = date
 
+    def break_habit(self):
+        """Method to mark the habit as broken."""
+        self.habit_broken = True
 
     def get_completeness_array(self):
-        # Retrieve the completeness array of the habit.
+        """ Retrieve the completeness array of the habit."""
         return self._completeness_array
 
 
     def set_completeness_array(self, array):
-        # Set a new completeness array for the habit.
+        """ Set a new completeness array for the habit."""
         self._completeness_array = array
 
 
     def get_last_deadline(self):
-        # Retrieve the last deadline of the habit.
+        """ Retrieve the last deadline of the habit."""
         return self._last_deadline
 
 
     def set_last_deadline(self, deadline):
-        # Set a new last deadline for the habit.
+        """ Set a new last deadline for the habit."""
         self._last_deadline = deadline
 
     def __str__(self):
-        # Return a string representation of the Habit.
+        """
+        Return a string representation of the Habit.
+
+        Returns:
+        - str: String representation of the Habit object.
+        """
 
         return f"Habit Information:\n" \
                f"Name: {self.__habit_name}\n" \
